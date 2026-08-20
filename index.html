@@ -71,23 +71,17 @@
             try {
                 const response = await fetch(webhookUrl, {
                     method: 'POST',
+                    mode: 'no-cors',
                     body: payload
                 });
 
-                if (response.ok) {
-                    card.innerHTML = `
-                        <div class="icon">✅</div>
-                        <h1>Erledigt!</h1>
-                        <p>Aktion wurde erfolgreich ausgeführt.<br>Du kannst dieses Fenster schließen.</p>
-                    `;
-                } else {
-                    const text = await response.text();
-                    card.innerHTML = `
-                        <div class="icon">❌</div>
-                        <h1>Fehler (${response.status})</h1>
-                        <p class="error">${text || 'Webhook hat einen Fehler zurückgegeben.'}</p>
-                    `;
-                }
+                // no-cors = opaque response, we can't read status
+                // but the request goes through if the server accepts it
+                card.innerHTML = `
+                    <div class="icon">✅</div>
+                    <h1>Gesendet!</h1>
+                    <p>Aktion wurde ausgelöst.<br>Du kannst dieses Fenster schließen.</p>
+                `;
             } catch (err) {
                 card.innerHTML = `
                     <div class="icon">❌</div>
